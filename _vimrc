@@ -84,3 +84,7 @@ set background=dark
 let g:solarized_termcolors=256
 colorscheme solarized
 
+
+au BufRead,BufNewFile *.msp set filetype=mdp
+au BufRead,BufNewFile *.msp syn match mdpComment "#.*$"
+
