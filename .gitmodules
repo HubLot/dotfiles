@@ -19,3 +19,6 @@
 [submodule "_vim/bundle/screen"]
 	path = _vim/bundle/screen
 	url = https://github.com/ervandew/screen.git
+[submodule "_vim/bundle/flake8"]
+	path = _vim/bundle/flake8
+	url = https://github.com/nvie/vim-flake8.git
