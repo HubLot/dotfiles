@@ -16,7 +16,6 @@ set number
 set tabstop=4
 
 "Auto-indentation
-"set autoindent
 
 filetype plugin on
 
@@ -42,12 +41,10 @@ set undolevels=150
 set suffixes=.jpg,.png,.jpeg,.gif,.bak,~,.swp,.swo,.o,.la
 
 
-" Backup dans ~/.vim/backup
-"if filewritable(expand("~/.vim/backup")) == 2 
-    " comme le répertoire est accessible en écriture,
-    " on va l'utiliser.
-"	set backupdir=$HOME/.vim/backup
-"endif
+"No Backup
+set nobackup
+set noswapfile
+
 
 "Activation de la syntaxe
 if has("syntax")
@@ -85,6 +82,7 @@ let g:solarized_termcolors=256
 colorscheme solarized
 
 
-au BufRead,BufNewFile *.msp set filetype=mdp
-au BufRead,BufNewFile *.msp syn match mdpComment "#.*$"
-
+"Vim Gromacs
+autocmd FileType mdp.gromacs set omnifunc=mdpcomplete#Complete
+autocmd BufWritePre *.gro call Update_number_of_atoms()
+autocmd FileType mdp.gromacs imap <silent> <buffer> = = <C-X><C-O>

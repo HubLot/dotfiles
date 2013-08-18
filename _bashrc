@@ -87,7 +87,7 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 #PATH
-export PATH=$PATH:/usr/local/openmpi-1.4.2/bin/:/home/temple/santuz/tools/mendeley_1.1.3/bin:/home/temple/santuz/bin
+export PATH=$PATH:/usr/local/openmpi-1.4.2/bin/:/home/temple/santuz/tools/mendeley_1.1.3/bin:/home/temple/santuz/bin:/home/temple/santuz/.local/bin
 
 #Default printer for Xmgrace
 export GRACE_PRINT_CMD='lpr -P paprika'
@@ -95,13 +95,15 @@ export GRACE_PRINT_CMD='lpr -P paprika'
 #Manage ssh-agent
 keychain ~/.ssh/id_dsa 1> /dev/null 2>&1
 
+#AutoJump
+source /usr/share/autojump/autojump.bash
+
 # some more ls aliases
 alias ll='ls -lh'
 alias la='ls -lhA'
 alias lt='ls -ltrh'
 alias ..='cd ..'
 alias h='history'
-alias j='jobs -l'
 alias du='du -kh'
 alias df='df -kh'
 alias untar='tar -xvzf'
@@ -118,11 +120,13 @@ alias share_admin="nautilus smb://10.93.167.11/adminsys"
 alias lpr="lpr -P paprika"
 
 alias aptana="/home/temple/santuz/tools/Aptana_Studio_3/AptanaStudio3"
+alias st="sublime_text"
 
 #root ssh on machines
 alias riena="ssh root@iena"
 alias www="ssh root@192.168.10.201"
 alias jade="ssh jade.cines.fr"
+alias cjade="ssh cathy@jade.cines.fr"
 alias denfert="ssh root@denfert"
 alias mti="ssh dsimb@81.194.29.55"
 
@@ -130,13 +134,22 @@ alias mti="ssh dsimb@81.194.29.55"
 alias gromacs407="source /usr/local/gromacs-4.0.7/bin/GMXRC"
 alias gromacs453="source /usr/local/gromacs-4.5.3/bin/GMXRC"
 alias gromacs455="source /usr/local/gromacs-4.5.5/bin/GMXRC"
+alias gromacs457="source /home/temple/santuz/tools/gromacs/gromacs-4.5.7/bin/GMXRC"
+alias gromacs46="source /home/temple/santuz/tools/gromacs/gromacs-4.6/bin/GMXRC"
+alias gromacs461="source /home/temple/santuz/tools/gromacs/gromacs-4.6.1/bin/GMXRC"
 
 #VMD
 alias utb_vmd="vmd -e ~/projets/UTB/vmdrc_UTB_urea"
+alias rh_vmd="vmd -e ~/projets/RhCG/vmdrc_Rh_urea"
 
 
 #Ptools
 export PYTHONPATH=$PYTHONPATH:/home/temple/santuz/tools/Ptools/ptools-1.0.4c/
+
+
+#Virtualenvwrapper (Python)
+export WORKON_HOME=~/.virtualenvs
+source /usr/local/bin/virtualenvwrapper.sh
 
 #Colors in less
 #http://superuser.com/questions/117841/get-colors-in-less-command
