@@ -3,7 +3,10 @@
 # for examples
 
 # If not running interactively, don't do anything
-[ -z "$PS1" ] && return
+case $- in
+    *i*) ;;
+      *) return;;
+esac
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
@@ -20,17 +23,21 @@ HISTFILESIZE=20000
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color) color_prompt=yes;;
+    xterm-color|*-256color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -40,14 +47,15 @@ esac
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+    # We have color support; assume it's compliant with Ecma-48
+    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    # a case would tend to support setf rather than setaf.)
+    color_prompt=yes
     else
-	color_prompt=
+    color_prompt=
     fi
 fi
+
 color_prompt=yes
 if [ "$color_prompt" = yes ]; then
 PS1='\
@@ -57,8 +65,9 @@ PS1='\
 \[\033[01;35m\]\h\
 \[\033[00m\]:\
 \[\033[01;31m\]\W\
-\[\033[00m\]]\
-\[\033[00m\]\$\
+\[\033[00m\]\
+\[\033[38;5;208m\]$(__git_ps1)\[\033[00m\]]\
+\$\
  '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '
@@ -86,100 +95,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-#PATH
-export PATH=$PATH:/usr/local/openmpi-1.4.2/bin/:/home/temple/santuz/tools/mendeley_1.1.3/bin:/home/temple/santuz/bin:/home/temple/santuz/.local/bin
-
-#Default printer for Xmgrace
-export GRACE_PRINT_CMD='lpr -P paprika'
-
-#Manage ssh-agent
-keychain ~/.ssh/id_dsa 1> /dev/null 2>&1
-
-#AutoJump
-source /usr/share/autojump/autojump.bash
-
-# some more ls aliases
-alias ll='ls -lh'
-alias la='ls -lhA'
-alias lt='ls -ltrh'
-alias ..='cd ..'
-alias h='history'
-alias du='du -kh'
-alias df='df -kh'
-alias untar='tar -xvzf'
-alias cpuu="ps -e -o pcpu,cpu,nice,state,cputime,args --sort pcpu | sed '/^ 0.0 /d'"
-alias g="gedit"
-alias n="nedit"
-alias clean="\rm *~ \#*\#"
-alias go="gnome-open"
-alias xmgrace="xmgrace -nxy"
-alias ssh="ssh -X"
-alias eclipse="$HOME/eclipse/eclipse"
-alias pm="pymol"
-alias share_admin="nautilus smb://10.93.167.11/adminsys"
-alias lpr="lpr -P paprika"
-
-alias aptana="/home/temple/santuz/tools/Aptana_Studio_3/AptanaStudio3"
-alias st="sublime_text"
-
-#root ssh on machines
-alias riena="ssh root@iena"
-alias www="ssh root@192.168.10.201"
-alias jade="ssh jade.cines.fr"
-alias cjade="ssh cathy@jade.cines.fr"
-alias denfert="ssh root@denfert"
-alias mti="ssh dsimb@81.194.29.55"
-
-#Gromacs
-alias gromacs407="source /usr/local/gromacs-4.0.7/bin/GMXRC"
-alias gromacs453="source /usr/local/gromacs-4.5.3/bin/GMXRC"
-alias gromacs455="source /usr/local/gromacs-4.5.5/bin/GMXRC"
-alias gromacs457="source /home/temple/santuz/tools/gromacs/gromacs-4.5.7/bin/GMXRC"
-alias gromacs46="source /home/temple/santuz/tools/gromacs/gromacs-4.6/bin/GMXRC"
-alias gromacs461="source /home/temple/santuz/tools/gromacs/gromacs-4.6.1/bin/GMXRC"
-
-#VMD
-alias utb_vmd="vmd -e ~/projets/UTB/vmdrc_UTB_urea"
-alias rh_vmd="vmd -e ~/projets/RhCG/vmdrc_Rh_urea"
-
-
-#Ptools
-export PYTHONPATH=$PYTHONPATH:/home/temple/santuz/tools/Ptools/ptools-1.0.4c/
-
-
-#Virtualenvwrapper (Python)
-export WORKON_HOME=~/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
-
-#Colors in less
-#http://superuser.com/questions/117841/get-colors-in-less-command
-#export LESS='-R'
-#export LESSOPEN='|~/.lessfilter %s'
-
-#Divers Fonctions
-
-# Functions
-extract () {
-	if [ -f $1 ] ; then
-		case $1 in
-			*.tar.bz2)	tar xjf $1		;;
-			*.tar.gz)	tar xzf $1		;;
-			*.bz2)		bunzip2 $1		;;
-			*.rar)		rar x $1		;;
-			*.gz)		gunzip $1		;;
-			*.tar)		tar xf $1		;;
-			*.tbz2)		tar xjf $1		;;
-			*.tgz)		tar xzf $1		;;
-			*.zip)		unzip $1		;;
-			*.Z)		uncompress $1	;;
-			*)			echo "'$1' cannot be extracted via extract()" ;;
-		esac
-	else
-		echo "'$1' is not a valid file"
-	fi
-}
-
-
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -193,6 +108,91 @@ fi
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
+  fi
 fi
+
+
+#### Hub
+
+#PATH
+export PATH=$PATH:/home/sablons/santuz/bin:/home/sablons/santuz/.local/bin
+
+#Default printer for Xmgrace
+export GRACE_PRINT_CMD='lpr -P paprika'
+
+#Manage ssh-agent
+#keychain ~/.ssh/id_dsa 1> /dev/null 2>&1
+
+
+# some more ls aliases
+alias ll='ls -lh'
+alias la='ls -lhA'
+alias lt='ls -ltrh'
+alias ..='cd ..'
+alias h='history'
+alias untar='tar -xvzf'
+alias clean="\rm *~ \#*\#"
+alias go="gnome-open"
+alias xmgrace="xmgrace -nxy"
+alias ssh="ssh -X"
+alias st="sublime_text"
+
+
+#Gromacs
+
+#VMD
+
+#SSH
+alias opera='ssh 193.52.219.45'
+
+#Git
+#Git auto completion
+source /data/santuz/projets/dotfiles/git-completion.bash
+
+# gitprompt configuration
+source /data/santuz/projets/dotfiles/git-prompt.sh
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_DESCRIBE_STYLE="branch"
+export GIT_PS1_SHOWUPSTREAM="auto git"
+
+
+
+
+#Virtualenvwrapper (Python)
+export WORKON_HOME=~/.virtualenvs
+source ~/.local/bin/virtualenvwrapper.sh
+
+#Colors in less
+#http://superuser.com/questions/117841/get-colors-in-less-command
+#export LESS='-R'
+#export LESSOPEN='|~/.lessfilter %s'
+
+#Divers Fonctions
+
+# Functions
+extract () {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)  tar xjf $1      ;;
+            *.tar.gz)   tar xzf $1      ;;
+            *.bz2)      bunzip2 $1      ;;
+            *.rar)      rar x $1        ;;
+            *.gz)       gunzip $1       ;;
+            *.tar)      tar xf $1       ;;
+            *.tbz2)     tar xjf $1      ;;
+            *.tgz)      tar xzf $1      ;;
+            *.zip)      unzip $1        ;;
+            *.Z)        uncompress $1   ;;
+            *)          echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+

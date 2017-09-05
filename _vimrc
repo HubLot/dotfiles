@@ -4,8 +4,6 @@ scriptencoding utf-8
 " VIM Perso
 "==============
 
-runtime bundle/pathogen/autoload/pathogen.vim
-
 " Mode non compatible avec Vi
 set nocompatible 
 
@@ -71,8 +69,6 @@ set ttyfast " fast terminal connection
 set wmnu " make command-line completion operates in an enhanced mode
 set showmode " show current mode in the status line
 
-"Pathogen
-call pathogen#infect()
 
 "256 Colors
 set t_Co=256
